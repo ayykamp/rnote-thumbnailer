@@ -136,7 +136,7 @@ int main (int argc, char ** argv)
     g_log_set_always_fatal (fatal_mask);
   }
   if (filenames == NULL || g_strv_length (filenames) != 2) {
-    g_print ("Expects an input and an output file\n");
+    g_print ("Input and output files are expected. Use -h for help.\n");
     return 1;
   }
   
