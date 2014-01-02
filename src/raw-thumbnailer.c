@@ -64,7 +64,7 @@ save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
   }
   else {
     small = pixbuf;
-    gdk_pixbuf_ref (small);
+    g_object_ref (small);
   }
   
   a_width = g_strdup_printf ("%d", width);
@@ -88,13 +88,10 @@ save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
   g_free(a_height);
   
   if (small) {
-    gdk_pixbuf_unref (small);
+    g_object_unref (small);
   }
   return;
 }
-
-
-
 
 static const GOptionEntry entries[] = {
   { "jpeg", 'j',  0, G_OPTION_ARG_NONE, &jpeg_output, "Output the thumbnail as a JPEG instead of PNG", NULL },
@@ -106,8 +103,6 @@ static const GOptionEntry entries[] = {
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, "[FILE...]" },
   { NULL }
 };
-
-
 
 int main (int argc, char ** argv)
 {
@@ -121,7 +116,6 @@ int main (int argc, char ** argv)
   
   context = g_option_context_new ("Thumbnail camera RAW files.");
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
-  g_type_init ();
   
   if (g_option_context_parse (context, &argc, &argv, &err) == FALSE) {
     g_print ("couldn't parse command-line options: %s\n", err->message);
@@ -160,5 +154,4 @@ int main (int argc, char ** argv)
   
   return 0;
 }
-
 
