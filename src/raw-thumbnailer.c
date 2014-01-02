@@ -47,7 +47,7 @@ save_pixbuf (GdkPixbuf *pixbuf, const char *path, int size)
   height = gdk_pixbuf_get_height (pixbuf);
   width = gdk_pixbuf_get_width (pixbuf);
   
-  if (size <= 128) {
+  if (size < height || size < width) {
     int d_width, d_height;
     
     if (width > height) {
@@ -143,7 +143,7 @@ int main (int argc, char ** argv)
   
   char* inputfname = g_filename_from_uri (uri, NULL, NULL);
   g_free(uri);
-  
+
   pixbuf = or_gdkpixbuf_extract_rotated_thumbnail(inputfname, output_size);
   g_free(inputfname);
   
