@@ -1,6 +1,6 @@
 /**
    raw-thumbnailer.c
-   Copyright (c) 2011 Hub Figuière
+   Copyright (c) 2011-2014 Hubert Figuière
    Copyright (c) 2007 Novell, Inc.
    Copyright (C) 2003,2004 Bastien Nocera <hadess@hadess.net>
     

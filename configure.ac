@@ -1,4 +1,4 @@
-AC_INIT(raw-thumbnailer, 3.0.0)
+AC_INIT(raw-thumbnailer, 3.0.1)
 
 AM_CONFIG_HEADER(config.h)
 

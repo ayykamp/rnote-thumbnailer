@@ -1,3 +1,5 @@
+3.0.1
+
 - Downscale properly the thumbnail (Anton Keks)
 - Fix error missage when arguments are wrong (Anton Keks)
 - Remove deprecate code (Anton Keks)
