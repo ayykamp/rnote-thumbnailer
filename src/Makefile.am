@@ -1,7 +1,7 @@
 
 
 
-INCLUDES = -I$(top_srcdir)                                              \
+AM_CPPFLAGS = -I$(top_srcdir)                                              \
            $(GNOME_CFLAGS) \
            $(OPENRAW_CFLAGS) \
            -DG_LOG_DOMAIN=\"raw-thumbnailer\"    \
