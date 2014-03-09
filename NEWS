@@ -1,3 +1,7 @@
+- Downscale properly the thumbnail (Anton Keks)
+- Fix error missage when arguments are wrong (Anton Keks)
+- Remove deprecate code (Anton Keks)
+
 3.0.0
 
 - Remove gnome-vfs dependency
