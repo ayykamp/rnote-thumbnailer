@@ -55,7 +55,8 @@ echo "- autoconf."		&& \
 echo "- automake."		&& \
   automake --add-missing --gnu	&& \
 echo				&& \
-  ./configure --enable-maintainer-mode "$@"		&& exit 0
+  test -z "$NOCONFIGURE" && ./configure --enable-maintainer-mode "$@"		&& \
+  exit 0
 
 exit 1
 
