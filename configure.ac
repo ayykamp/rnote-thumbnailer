@@ -1,4 +1,4 @@
-AC_INIT(raw-thumbnailer, 3.0.1)
+AC_INIT(raw-thumbnailer, 3.24.0)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -22,7 +22,7 @@ PKG_CHECK_MODULES(GNOME, gdk-pixbuf-2.0 gio-2.0 glib-2.0)
 AC_SUBST(GNOME_CFLAGS)
 AC_SUBST(GNOME_LIBS)
 
-PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-1.0 >= 0.0.9)
+PKG_CHECK_MODULES(OPENRAW, libopenraw-gnome-0.1 >= 0.1.0)
 AC_SUBST(OPENRAW_CFLAGS)
 AC_SUBST(OPENRAW_LIBS)
 
