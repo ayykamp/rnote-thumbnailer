@@ -7,3 +7,6 @@ image/x-pentax-pef
 image/x-sony-arw
 image/x-epson-erf
 image/x-minolta-mrw
+image/x-fuji-raf
+image/x-panasonic-raw
+image/x-panasonic-raw2
