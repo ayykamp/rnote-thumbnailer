@@ -1,5 +1,6 @@
 image/x-adobe-dng
 image/x-canon-cr2
+image/x-canon-cr3
 image/x-canon-crw
 image/x-nikon-nef
 image/x-olympus-orf
@@ -9,4 +10,5 @@ image/x-epson-erf
 image/x-minolta-mrw
 image/x-fuji-raf
 image/x-panasonic-raw
-image/x-panasonic-raw2
+image/x-panasonic-rw2
+image/x-panasonic-rwl

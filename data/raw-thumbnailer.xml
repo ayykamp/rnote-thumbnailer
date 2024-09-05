@@ -16,7 +16,7 @@
     <glob pattern="*.dng"/>
   </mime-type>
 
-  <!-- Canon has 2 format: CRW and CR2  !-->
+  <!-- Canon has 3 formats: CRW, CR2 and CR3 !-->
 
   <!-- CRW is easy !-->
   <mime-type type="image/x-canon-crw">
@@ -38,6 +38,15 @@
     <acronym>CR2</acronym>
     <expanded-acronym>Canon Raw 2</expanded-acronym>
     <glob pattern="*.cr2"/>
+  </mime-type>
+
+  <!-- CR3 is a ISO Media-->
+  <mime-type type="image/x-canon-cr3">
+    <sub-class-of type="image/x-dcraw"/>
+    <comment>Canon raw image</comment>
+    <acronym>CR3</acronym>
+    <expanded-acronym>Canon Raw 3</expanded-acronym>
+    <glob pattern="*.cr3"/>
   </mime-type>
 
   <!-- ERF is a TIFF !-->
@@ -108,6 +117,14 @@
     <glob pattern="*.nef"/>
   </mime-type>
 
+  <mime-type type="image/x-nikon-nrw">
+    <sub-class-of type="image/x-dcraw"/>
+    <sub-class-of type="image/tiff"/>
+    <comment>Nikon raw image</comment>
+    <acronym>NRW</acronym>
+    <glob pattern="*.nrw"/>
+  </mime-type>
+
   <mime-type type="image/x-olympus-orf">
     <sub-class-of type="image/x-dcraw"/>
     <comment>Olympus raw image</comment>
@@ -132,6 +149,29 @@
       <match value="IIU\x00\x08\x00\x00\x00" type="string" offset="0"/>
     </magic>
     <glob pattern="*.raw"/>
+  </mime-type>
+
+  <mime-type type="image/x-panasonic-rw2">
+    <sub-class-of type="image/x-dcraw"/>
+    <sub-class-of type="image/x-panasonic-raw"/>
+    <comment>Panasonic raw image</comment>
+    <magic priority="50">
+      <!-- Some kind of TIFF file with a non-standard version in prefix !-->
+      <match value="IIU\x00\x08\x00\x00\x00" type="string" offset="0"/>
+    </magic>
+    <glob pattern="*.rw2"/>
+  </mime-type>
+
+  <mime-type type="image/x-panasonic-rwl">
+    <sub-class-of type="image/x-dcraw"/>
+    <sub-class-of type="image/x-panasonic-raw"/>
+    <sub-class-of type="image/x-panasonic-rw2"/>
+    <comment>Leica raw image</comment>
+    <magic priority="50">
+      <!-- Some kind of TIFF file with a non-standard version in prefix !-->
+      <match value="IIU\x00\x08\x00\x00\x00" type="string" offset="0"/>
+    </magic>
+    <glob pattern="*.rwl"/>
   </mime-type>
 
   <mime-type type="image/x-pentax-pef">

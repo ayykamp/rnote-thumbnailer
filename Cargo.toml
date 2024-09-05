@@ -1,0 +1,9 @@
+[package]
+name = "gnome-raw-thumbnailer"
+version = "47.0.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5", features = [ "derive" ] }
+image = { version = "0.25.1", features = [ "png", "jpeg" ], default-features = false }
+libopenraw = { version = "0.4.0-alpha.7", default-features = false, features = [ "probe" ] }

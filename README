@@ -1,5 +1,6 @@
-This is a camera raw thumbnailers for Gnome.
+This is a camera raw thumbnailers for GNOME.
 
+It is now built in Rust and uses the Rust version of libopenraw.
 It depends on libopenraw to do most of the work and does
 extract previews instead of processing the raw data. That
 makes it fast.
@@ -7,7 +8,8 @@ makes it fast.
 But depending on libopenraw mean that it might not support
 all formats and might have bugs.
 
-Libopenraw: http://libopenraw.freedesktop.org/wiki/
+Libopenraw: http://libopenraw.freedesktop.org
+Raw Thumbnailer https://libopenraw.freedesktop.org/raw-thumbnailer/
 
-Hubert Figuiere
+Hubert Figuière
 <hub@figuiere.net>
