@@ -1,15 +1,20 @@
 This is a camera raw thumbnailers for GNOME.
 
-It is now built in Rust and uses the Rust version of libopenraw.
-It depends on libopenraw to do most of the work and does
-extract previews instead of processing the raw data. That
-makes it fast.
+It will be used by Nautilus and other application supporting
+thumbnailer to generate thumbnails from camera raw files.
+
+It is now built in Rust and uses the Rust version of libopenraw.  It
+depends on libopenraw to do most of the work and does extract previews
+instead of processing the raw data. That makes it fast.
 
 But depending on libopenraw mean that it might not support
 all formats and might have bugs.
 
 Libopenraw: http://libopenraw.freedesktop.org
 Raw Thumbnailer https://libopenraw.freedesktop.org/raw-thumbnailer/
+
+The source code is hosted on GNOME gitlab:
+https://gitlab.gnome.org/World/gnome-raw-thumbnailer
 
 Hubert Figuière
 <hub@figuiere.net>
