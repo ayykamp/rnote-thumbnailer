@@ -105,3 +105,40 @@ fn main() {
     };
     println!("done");
 }
+
+#[cfg(test)]
+mod test {
+    use std::io::BufRead;
+
+    #[test]
+    fn test_mimes() {
+        let thumbnailer_file = include_bytes!("../data/raw.thumbnailer");
+        let cursor = std::io::Cursor::new(thumbnailer_file);
+        let mut reader = std::io::BufReader::new(cursor);
+        let mut line = String::default();
+        while let Ok(r) = reader.read_line(&mut line) {
+            if r == 0 {
+                break;
+            }
+
+            if line.starts_with("MimeType=") {
+                let mut mimes = line
+                    .trim_end()
+                    .split('=')
+                    .skip(1)
+                    .next()
+                    .unwrap()
+                    .split(';')
+                    .filter(|s| *s != "")
+                    .collect::<Vec<_>>();
+                let mut or_mimes = libopenraw::mime_types().to_vec();
+
+                mimes.sort();
+                or_mimes.sort();
+
+                assert_eq!(mimes, or_mimes);
+            }
+            line.clear();
+        }
+    }
+}
