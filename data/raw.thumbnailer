@@ -1,4 +1,4 @@
 [Thumbnailer Entry]
 TryExec=raw-thumbnailer
-Exec=raw-thumbnailer -s %s %u %o
+Exec=raw-thumbnailer -s %s %i %o
 MimeType=image/x-adobe-dng;image/x-canon-cr2;image/x-canon-cr3;image/x-canon-crw;image/x-nikon-nef;image/x-nikon-nrw;image/x-olympus-orf;image/x-pentax-pef;image/x-sony-arw;image/x-sony-sr2;image/x-epson-erf;image/x-minolta-mrw;image/x-fuji-raf;image/x-panasonic-rw;image/x-panasonic-rw2;
