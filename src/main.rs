@@ -1,6 +1,11 @@
+// SPDX-License: GPL-3.0-or-later
+// SPDX-Copyright: Hubert Figuière <hub@figuiere.net>
+
+use std::error::Error;
 use std::io::Write;
 
 use clap::Parser;
+use gettextrs::gettext as i18n;
 use image::imageops::FilterType;
 use image::ImageReader;
 use libopenraw::{Bitmap, DataType};
@@ -18,29 +23,27 @@ struct Cli {
     output: std::ffi::OsString,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     let output_size = cli.size.unwrap_or(128);
 
-    let thumbnail = libopenraw::rawfile_from_file(cli.input, None)
-        .and_then(|rawfile| {
-            let size = rawfile
-                .thumbnail_sizes()
-                .iter()
-                .filter(|s| **s >= output_size)
-                .fold(
-                    0,
-                    |acc, size| if acc == 0 || *size < acc { *size } else { acc },
-                );
-            if size == 0 {
-                eprintln!("No thumbnail found");
-                return Err(libopenraw::Error::NotFound);
-            }
-            // XXX fixme it's not the smallest.
-            rawfile.thumbnail_for_size(size)
-        })
-        .expect("Thumbnail not found");
+    let thumbnail = libopenraw::rawfile_from_file(cli.input, None).and_then(|rawfile| {
+        let size = rawfile
+            .thumbnail_sizes()
+            .iter()
+            .filter(|s| **s >= output_size)
+            .fold(
+                0,
+                |acc, size| if acc == 0 || *size < acc { *size } else { acc },
+            );
+        if size == 0 {
+            eprintln!("{}", i18n("No thumbnail found."));
+            return Err(libopenraw::Error::NotFound);
+        }
+        // XXX fixme it's not the smallest.
+        rawfile.thumbnail_for_size(size)
+    })?;
 
     let width = thumbnail.width();
     let height = thumbnail.height();
@@ -50,15 +53,17 @@ fn main() {
     let image_buffer = match thumbnail.data_type() {
         DataType::Jpeg => {
             if cli.jpeg && !need_resize {
-                let mut file = std::fs::File::create(cli.output).expect("Can't create output");
-                let _written = file
-                    .write(thumbnail.data8().expect("Couldn't get thumbnail data"))
-                    .expect("Can't write output");
+                let mut file = std::fs::File::create(cli.output)?;
+                let _written = file.write(
+                    thumbnail
+                        .data8()
+                        .unwrap_or_else(|| panic!("{}", &i18n("Couldn't get thumbnail data"))),
+                )?;
 
-                return;
+                return Ok(());
             } else {
                 let mut data =
-                    std::io::Cursor::new(thumbnail.data8().expect("Couldn't get thumbnail data"));
+                    std::io::Cursor::new(thumbnail.data8().ok_or(libopenraw::Error::NotFound)?);
                 let reader = ImageReader::with_format(&mut data, image::ImageFormat::Jpeg);
                 reader.decode().map(|image| image.into_rgb8()).ok()
             }
@@ -68,7 +73,7 @@ fn main() {
             height,
             thumbnail
                 .data8()
-                .expect("Couldn't get thumbnail data")
+                .ok_or(libopenraw::Error::NotFound)?
                 .to_vec(),
         ),
         _ => None,
@@ -99,11 +104,9 @@ fn main() {
                 FilterType::Nearest,
             );
         }
-        image_buffer
-            .save_with_format(cli.output, format)
-            .expect("Failed to save to {format:?}");
+        image_buffer.save_with_format(cli.output, format)?;
     };
-    println!("done");
+    Ok(())
 }
 
 #[cfg(test)]

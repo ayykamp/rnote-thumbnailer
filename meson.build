@@ -5,6 +5,9 @@ project(
 
 cargo = find_program('cargo', required: true)
 gnome = import('gnome')
+i18n = import('i18n')
+
+gettext_package = 'raw-thumbnailer'
 
 datadir = get_option('datadir')
 
@@ -60,5 +63,7 @@ gnome_raw_thumbnailer = custom_target(
     'cp', cargo_target_dir / rust_target / 'gnome-raw-thumbnailer', '@OUTDIR@' / 'raw-thumbnailer'
   ],
 )
+
+i18n.gettext(gettext_package, preset: 'glib')
 
 subdir('data')
