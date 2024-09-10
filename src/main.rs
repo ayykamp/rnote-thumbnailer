@@ -27,6 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     let output_size = cli.size.unwrap_or(128);
+    let mut orientation = 0;
 
     let thumbnail = libopenraw::rawfile_from_file(cli.input, None).and_then(|rawfile| {
         let size = rawfile
@@ -41,10 +42,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             eprintln!("{}", i18n("No thumbnail found."));
             return Err(libopenraw::Error::NotFound);
         }
+        orientation = rawfile.orientation();
         // XXX fixme it's not the smallest.
         rawfile.thumbnail_for_size(size)
     })?;
-
     let width = thumbnail.width();
     let height = thumbnail.height();
 
@@ -104,6 +105,13 @@ fn main() -> Result<(), Box<dyn Error>> {
                 FilterType::Nearest,
             );
         }
+        // XXX handle mirrored versions
+        image_buffer = match orientation {
+            3 => image::imageops::rotate180(&image_buffer),
+            6 => image::imageops::rotate90(&image_buffer),
+            8 => image::imageops::rotate270(&image_buffer),
+            _ => image_buffer
+        };
         image_buffer.save_with_format(cli.output, format)?;
     };
     Ok(())
