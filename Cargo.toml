@@ -1,5 +1,5 @@
 [package]
-name = "gnome-raw-thumbnailer"
+name = "raw-thumbnailer"
 version = "47.0.0"
 edition = "2021"
 license = "GPL-3.0-or-later"

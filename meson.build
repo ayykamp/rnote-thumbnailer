@@ -60,7 +60,7 @@ gnome_raw_thumbnailer = custom_target(
     cargo, 'build',
     cargo_options,
     '&&',
-    'cp', cargo_target_dir / rust_target / 'gnome-raw-thumbnailer', '@OUTDIR@' / 'raw-thumbnailer'
+    'cp', cargo_target_dir / rust_target / 'raw-thumbnailer', '@OUTDIR@' / 'raw-thumbnailer'
   ],
 )
 
