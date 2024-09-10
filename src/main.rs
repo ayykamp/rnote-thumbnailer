@@ -1,6 +1,7 @@
 use std::io::Write;
 
 use clap::Parser;
+use image::imageops::FilterType;
 use image::ImageReader;
 use libopenraw::{Bitmap, DataType};
 
@@ -23,41 +24,84 @@ fn main() {
     let output_size = cli.size.unwrap_or(128);
 
     let thumbnail = libopenraw::rawfile_from_file(cli.input, None)
-        .and_then(|rawfile| rawfile.thumbnail_for_size(output_size)).expect("Thumbnail not found");
+        .and_then(|rawfile| {
+            let size = rawfile
+                .thumbnail_sizes()
+                .iter()
+                .filter(|s| **s >= output_size)
+                .fold(
+                    0,
+                    |acc, size| if acc == 0 || *size < acc { *size } else { acc },
+                );
+            if size == 0 {
+                eprintln!("No thumbnail found");
+                return Err(libopenraw::Error::NotFound);
+            }
+            // XXX fixme it's not the smallest.
+            rawfile.thumbnail_for_size(size)
+        })
+        .expect("Thumbnail not found");
 
-    match thumbnail.data_type() {
-         DataType::Jpeg => {
-             if cli.jpeg {
-                 let mut file = std::fs::File::create(cli.output).expect("Can't create output");
-                 let written = file.write(thumbnail.data8().expect("Couldn't get thumbnail data")).expect("Can't write output");
-                 println!("Wrote {written}");
-             } else {
-                 let mut data = std::io::Cursor::new(thumbnail.data8().expect("Couldn't get thumbnail data"));
-                 let reader = ImageReader::with_format(&mut data, image::ImageFormat::Jpeg);
-                 let image_buffer = reader.decode().expect("Couldn't decode").into_rgb8();
-                 image_buffer.save_with_format(
-                    cli.output,
-                    image::ImageFormat::Png,
-                )
-                .expect("Failed to save to PNG");
-             }
-         },
-        DataType::PixmapRgb8 => {
-            let format = if cli.jpeg {
-                image::ImageFormat::Jpeg
+    let width = thumbnail.width();
+    let height = thumbnail.height();
+
+    let need_resize = std::cmp::max(thumbnail.width(), thumbnail.height()) > output_size;
+
+    let image_buffer = match thumbnail.data_type() {
+        DataType::Jpeg => {
+            if cli.jpeg && !need_resize {
+                let mut file = std::fs::File::create(cli.output).expect("Can't create output");
+                let _written = file
+                    .write(thumbnail.data8().expect("Couldn't get thumbnail data"))
+                    .expect("Can't write output");
+
+                return;
             } else {
-                image::ImageFormat::Png
-            };
-            image::save_buffer_with_format(
-                cli.output,
-                thumbnail.data8().expect("Couldn't get thumbnail data"),
-                thumbnail.width(),
-                thumbnail.height(),
-                image::ColorType::Rgb8,
-                format,
-            )
-            .expect("Failed to save");
+                let mut data =
+                    std::io::Cursor::new(thumbnail.data8().expect("Couldn't get thumbnail data"));
+                let reader = ImageReader::with_format(&mut data, image::ImageFormat::Jpeg);
+                reader.decode().map(|image| image.into_rgb8()).ok()
+            }
         }
-        _ => {}
-    }
+        DataType::PixmapRgb8 => image::ImageBuffer::from_raw(
+            width,
+            height,
+            thumbnail
+                .data8()
+                .expect("Couldn't get thumbnail data")
+                .to_vec(),
+        ),
+        _ => None,
+    };
+
+    if let Some(mut image_buffer) = image_buffer {
+        let format = if cli.jpeg {
+            image::ImageFormat::Jpeg
+        } else {
+            image::ImageFormat::Png
+        };
+
+        if need_resize {
+            let ratio = if width >= height {
+                // Landscape
+                width as f64 / output_size as f64
+            } else {
+                // Portrait
+                height as f64 / output_size as f64
+            };
+            let nwidth = width as f64 / ratio;
+            let nheight = height as f64 / ratio;
+
+            image_buffer = image::imageops::resize(
+                &image_buffer,
+                nwidth as u32,
+                nheight as u32,
+                FilterType::Nearest,
+            );
+        }
+        image_buffer
+            .save_with_format(cli.output, format)
+            .expect("Failed to save to {format:?}");
+    };
+    println!("done");
 }
