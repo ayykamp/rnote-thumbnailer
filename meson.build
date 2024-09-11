@@ -64,6 +64,5 @@ gnome_raw_thumbnailer = custom_target(
   ],
 )
 
-i18n.gettext(gettext_package, preset: 'glib')
-
 subdir('data')
+subdir('po')
