@@ -8,4 +8,4 @@ license = "GPL-3.0-or-later"
 clap = { version = "4.5", features = [ "derive" ] }
 gettext-rs = { version = "0.7.0", features = [ "gettext-system" ] }
 image = { version = "0.25.1", features = [ "png", "jpeg" ], default-features = false }
-libopenraw = { version = "0.4.0-alpha.7", default-features = false, features = [ "probe" ] }
+libopenraw = { version = "0.4.0-alpha.8", default-features = false }

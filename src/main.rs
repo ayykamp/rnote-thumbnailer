@@ -7,7 +7,8 @@ use std::io::Write;
 use clap::Parser;
 use gettextrs::gettext as i18n;
 use image::imageops::FilterType;
-use image::ImageReader;
+use image::{DynamicImage, ImageReader};
+use libopenraw::RenderingOptions;
 use libopenraw::{Bitmap, DataType};
 
 #[derive(Parser)]
@@ -27,25 +28,26 @@ fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     let output_size = cli.size.unwrap_or(128);
-    let mut orientation = 0;
 
-    let thumbnail = libopenraw::rawfile_from_file(cli.input, None).and_then(|rawfile| {
-        let size = rawfile
-            .thumbnail_sizes()
-            .iter()
-            .filter(|s| **s >= output_size)
-            .fold(
-                0,
-                |acc, size| if acc == 0 || *size < acc { *size } else { acc },
-            );
-        if size == 0 {
-            eprintln!("{}", i18n("No thumbnail found."));
-            return Err(libopenraw::Error::NotFound);
-        }
-        orientation = rawfile.orientation();
-        // XXX fixme it's not the smallest.
-        rawfile.thumbnail_for_size(size)
-    })?;
+    let rawfile = libopenraw::rawfile_from_file(cli.input, None)?;
+    let size = rawfile
+        .thumbnail_sizes()
+        .iter()
+        .filter(|s| **s >= output_size)
+        .fold(
+            0,
+            |acc, size| if acc == 0 || *size < acc { *size } else { acc },
+        );
+    let orientation = rawfile.orientation();
+    let thumbnail = if size == 0 {
+        let options = RenderingOptions::default();
+        let rawdata = rawfile.raw_data(false)?;
+        let rendered_image: Box<dyn Bitmap> = Box::new(rawdata.rendered_image(options)?);
+        rendered_image
+    } else {
+        let thumbnail: Box<dyn Bitmap> = Box::new(rawfile.thumbnail_for_size(size)?);
+        thumbnail
+    };
     let width = thumbnail.width();
     let height = thumbnail.height();
 
@@ -66,7 +68,11 @@ fn main() -> Result<(), Box<dyn Error>> {
                 let mut data =
                     std::io::Cursor::new(thumbnail.data8().ok_or(libopenraw::Error::NotFound)?);
                 let reader = ImageReader::with_format(&mut data, image::ImageFormat::Jpeg);
-                reader.decode().map(|image| image.into_rgb8()).ok()
+                reader
+                    .decode()
+                    .map(|image| image.into_rgb8())
+                    .ok()
+                    .map(DynamicImage::ImageRgb8)
             }
         }
         DataType::PixmapRgb8 => image::ImageBuffer::from_raw(
@@ -76,8 +82,21 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .data8()
                 .ok_or(libopenraw::Error::NotFound)?
                 .to_vec(),
-        ),
-        _ => None,
+        )
+        .map(DynamicImage::ImageRgb8),
+        DataType::PixmapRgb16 => image::ImageBuffer::from_raw(
+            width,
+            height,
+            thumbnail
+                .data16()
+                .ok_or(libopenraw::Error::NotFound)?
+                .to_vec(),
+        )
+        .map(DynamicImage::ImageRgb16),
+        _ => {
+            eprintln!("Unhandled format {:?}", thumbnail.data_type());
+            None
+        }
     };
 
     if let Some(mut image_buffer) = image_buffer {
@@ -98,19 +117,32 @@ fn main() -> Result<(), Box<dyn Error>> {
             let nwidth = width as f64 / ratio;
             let nheight = height as f64 / ratio;
 
-            image_buffer = image::imageops::resize(
+            image_buffer = DynamicImage::ImageRgba8(image::imageops::resize(
                 &image_buffer,
                 nwidth as u32,
                 nheight as u32,
                 FilterType::Nearest,
-            );
+            ));
         }
-        // XXX handle mirrored versions
+        // Exif orientation explainer:
+        // https://jdhao.github.io/2019/07/31/image_rotation_exif_info/
         image_buffer = match orientation {
-            3 => image::imageops::rotate180(&image_buffer),
-            6 => image::imageops::rotate90(&image_buffer),
-            8 => image::imageops::rotate270(&image_buffer),
-            _ => image_buffer
+            2 => DynamicImage::ImageRgba8(image::imageops::flip_horizontal(&image_buffer)),
+            3 => DynamicImage::ImageRgba8(image::imageops::rotate180(&image_buffer)),
+            4 => DynamicImage::ImageRgba8(image::imageops::flip_vertical(&image_buffer)),
+            5 | 6 => {
+                if orientation == 5 {
+                    image::imageops::flip_horizontal_in_place(&mut image_buffer)
+                }
+                DynamicImage::ImageRgba8(image::imageops::rotate90(&image_buffer))
+            }
+            7 | 8 => {
+                if orientation == 7 {
+                    image::imageops::flip_horizontal_in_place(&mut image_buffer)
+                }
+                DynamicImage::ImageRgba8(image::imageops::rotate270(&image_buffer))
+            }
+            _ => image_buffer,
         };
         image_buffer.save_with_format(cli.output, format)?;
     };
@@ -122,6 +154,8 @@ mod test {
     use std::io::BufRead;
 
     #[test]
+    /// This test verify that the thumbnailer file has all the MIME types
+    /// that libopenraw handles.
     fn test_mimes() {
         let thumbnailer_file = include_bytes!("../data/raw.thumbnailer");
         let cursor = std::io::Cursor::new(thumbnailer_file);
