@@ -1,6 +1,6 @@
 project(
   'gnome-raw-thumbnailer', 'rust',
-  version: '47.0'
+  version: '47.0.0'
 )
 
 cargo = find_program('cargo', required: true)
@@ -63,6 +63,8 @@ gnome_raw_thumbnailer = custom_target(
     'cp', cargo_target_dir / rust_target / 'raw-thumbnailer', '@OUTDIR@' / 'raw-thumbnailer'
   ],
 )
+
+meson.add_dist_script('./build-aux/cargo-vendor.sh', meson.project_source_root() / 'Cargo.toml')
 
 subdir('data')
 subdir('po')

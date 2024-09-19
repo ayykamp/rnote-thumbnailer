@@ -11,13 +11,12 @@
 
 Summary: Camera raw thumbnailing for GNOME
 Name: gnome-raw-thumbnailer
-Version: 47.0
+Version: 47.0.0
 Release: 1
 License: GNU General Public License (GPL)
 Group: System/GUI/GNOME
 %define prefix   /usr
 Source: ./gnome-raw-thumbnailer-%{version}.tar.xz
-Source1: ./raw-thumbnailer-%{version}.0-vendor.tar.xz
 BuildRequires: cargo-rpm-macros >= 24
 BuildRequires: meson
 BuildRequires: shared-mime-info
@@ -27,7 +26,7 @@ Camera raw thumbnailer for GNOME. Works by extracting the thumbnail
 from the file if it is possible.
 
 %prep
-%autosetup -p1 -a1
+%autosetup -p1
 %cargo_prep -v vendor
 
 %build
