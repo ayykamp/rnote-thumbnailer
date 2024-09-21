@@ -1,6 +1,7 @@
-47.0.0
+47.0.0 - 2024-09-21
 
 - Rewrote in Rust.
+- Uses meson to build.
 
 3.0.1
 
