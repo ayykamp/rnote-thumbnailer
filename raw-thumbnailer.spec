@@ -8,15 +8,14 @@
 
 # norootforbuild
 
-
 Summary: Camera raw thumbnailing for GNOME
-Name: gnome-raw-thumbnailer
-Version: 47.0.0
+Name: raw-thumbnailer
+Version: 47.0.1
 Release: 1
 License: GNU General Public License (GPL)
 Group: System/GUI/GNOME
 %define prefix   /usr
-Source: ./gnome-raw-thumbnailer-%{version}.tar.xz
+Source: ./%{name}-%{version}.tar.xz
 BuildRequires: cargo-rpm-macros >= 24
 BuildRequires: meson
 BuildRequires: shared-mime-info

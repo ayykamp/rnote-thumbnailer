@@ -1,6 +1,6 @@
 project(
-  'gnome-raw-thumbnailer', 'rust',
-  version: '47.0.0'
+  'raw-thumbnailer', 'rust',
+  version: '47.0.1'
 )
 
 cargo = find_program('cargo', required: true)

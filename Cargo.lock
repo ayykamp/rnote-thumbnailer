@@ -724,7 +724,7 @@ dependencies = [
 
 [[package]]
 name = "raw-thumbnailer"
-version = "47.0.0"
+version = "47.0.1"
 dependencies = [
  "clap",
  "gettext-rs",

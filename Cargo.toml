@@ -1,6 +1,6 @@
 [package]
 name = "raw-thumbnailer"
-version = "47.0.0"
+version = "47.0.1"
 edition = "2021"
 license = "GPL-3.0-or-later"
 
