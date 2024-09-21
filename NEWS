@@ -1,3 +1,7 @@
+47.0.1 - 2024-09-21
+
+- Fix the module name / tarballs.
+
 47.0.0 - 2024-09-21
 
 - Rewrote in Rust.
