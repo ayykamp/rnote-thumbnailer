@@ -24,6 +24,8 @@ BuildRequires: shared-mime-info
 Camera raw thumbnailer for GNOME. Works by extracting the thumbnail
 from the file if it is possible.
 
+%global debug_package %{nil}
+
 %prep
 %autosetup -p1
 %cargo_prep -v vendor
