@@ -18,12 +18,11 @@ https://gitlab.gnome.org/World/gnome-raw-thumbnailer
 
 # Packaging
 
-There is a `gnome-raw-thumbnailer.spec` file as an example of RPM
+There is a `raw-thumbnailer.spec` file as an example of RPM
 packaging.  While it was written for Fedora it is probably not up to
 it standards (it uses vendora tarball). It was written to allow build
 a RPM package for deployment. You can use it by putting the source
-tarball in `~/rpmbuild/SOURCES` and then `rpmbuild -ba
-gnome-raw-thumbnailer.spec`.
+tarball in `~/rpmbuild/SOURCES` and then `rpmbuild -ba raw-thumbnailer.spec`.
 
 # Maintainer
 
