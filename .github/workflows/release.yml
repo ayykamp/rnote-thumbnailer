@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  dist:
+  release:
     runs-on: ubuntu-22.04
     container: fedora:40
     permissions:
@@ -26,6 +26,12 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rnote-dist-archive-artifact
+          name: rnote-thumbnailer
           path: target/release/rnote-thumbnailer
           if-no-files-found: error
+      - name: Upload release asset
+        if: ${{ github.event_name == 'release' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.ref_name }} target/release/rnote-thumbnailer
