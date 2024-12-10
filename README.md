@@ -13,7 +13,7 @@ It is built in Rust and uses the `rnote-engine` crate.
 
 ## Pre compiled binary
 
-1. Use [`cargo-binstall`](https://github.com/cargo-bins/cargo-binstall) to get the binary (`cargo binstall rnote-thumbnailer`) or download the latest release artifact.
+1. Download the [latest release artifact](https://github.com/ayykamp/rnote-thumbnailer/releases/latest).
 2. Run (you may need to create the necessary directories) \
   `cp data/com.github.flxzt.rnote.xml ~/.local/share/mime/packages/` \
   `cp data/rnote.thumbnailer ~/.local/share/thumbnailers/`
