@@ -15,7 +15,7 @@ Requires cargo and meson to be installed.
 
 ## Pre compiled binary
 
-1. Download the [latest release artifact](https://github.com/ayykamp/rnote-thumbnailer/releases/latest).
+1. Download the [latest release artifact](https://github.com/ayykamp/rnote-thumbnailer/releases/latest) and place it somewhere in your PATH.
 2. Run (you may need to create the necessary directories) \
   `cp data/com.github.flxzt.rnote.xml ~/.local/share/mime/packages/` \
   `cp data/rnote.thumbnailer ~/.local/share/thumbnailers/`
