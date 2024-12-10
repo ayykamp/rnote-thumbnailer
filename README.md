@@ -9,7 +9,9 @@ It is built in Rust and uses the `rnote-engine` crate.
 
 ## From Source
 
-`meson setup build && meson install`
+Requires cargo and meson to be installed.
+
+`meson setup build && cd build && meson configure -Dprofile=release && meson install`
 
 ## Pre compiled binary
 
@@ -17,6 +19,8 @@ It is built in Rust and uses the `rnote-engine` crate.
 2. Run (you may need to create the necessary directories) \
   `cp data/com.github.flxzt.rnote.xml ~/.local/share/mime/packages/` \
   `cp data/rnote.thumbnailer ~/.local/share/thumbnailers/`
+
+Note: If youre using nautilus, restart it with `nautilus -q` to generate thumbnails.
 
 # Packaging
 
