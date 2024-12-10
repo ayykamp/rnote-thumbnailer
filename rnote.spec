@@ -1,5 +1,5 @@
 #
-# spec file for package raw-thumbnailer
+# spec file for package rnote-thumbnailer
 #
 # Copyright (c) 2024 Hubert Figuière
 # This file and all modifications and additions to the pristine
@@ -8,9 +8,9 @@
 
 # norootforbuild
 
-Summary: Camera raw thumbnailing for GNOME
-Name: raw-thumbnailer
-Version: 47.0.1
+Summary: Rnote thumbnailing for GNOME
+Name: rnote-thumbnailer
+Version: 0.1.0
 Release: 1
 License: GNU General Public License (GPL)
 Group: System/GUI/GNOME
@@ -21,8 +21,7 @@ BuildRequires: meson
 BuildRequires: shared-mime-info
 
 %description
-Camera raw thumbnailer for GNOME. Works by extracting the thumbnail
-from the file if it is possible.
+Rnote thumbnailer.
 
 %global debug_package %{nil}
 
@@ -49,9 +48,8 @@ usr/bin/update-mime-database /usr/share/mime >/dev/null
 %defattr(-,root,root)
 %doc README NEWS COPYING ChangeLog
 
-%{prefix}/bin/raw-thumbnailer
-%{_datadir}/thumbnailers/raw.thumbnailer
-%{_datadir}/mime/packages/raw-thumbnailer.xml
+%{prefix}/bin/rnote-thumbnailer
+%{_datadir}/thumbnailers/rnote.thumbnailer
+%{_datadir}/mime/packages/com.github.flxzt.rnote.xml
 
 %changelog
-

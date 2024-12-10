@@ -1,12 +1,12 @@
 
 install_data(
-  'raw-thumbnailer.xml',
-  install_dir: join_paths(datadir, 'mime', 'packages')
+  'com.github.flxzt.rnote.xml',
+  install_dir: datadir / 'mime' / 'packages'
 )
 
 install_data(
-  'raw.thumbnailer',
-  install_dir: join_paths(datadir, 'thumbnailers')
+  'rnote.thumbnailer',
+  install_dir: datadir / 'thumbnailers'
 )
 
 gnome.post_install(

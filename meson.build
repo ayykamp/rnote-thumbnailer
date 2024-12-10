@@ -1,13 +1,11 @@
 project(
-  'raw-thumbnailer', 'rust',
-  version: '47.0.1'
+  'rnote-thumbnailer', 'rust',
+  version: '0.1.0'
 )
 
 cargo = find_program('cargo', required: true)
 gnome = import('gnome')
 i18n = import('i18n')
-
-gettext_package = 'raw-thumbnailer'
 
 datadir = get_option('datadir')
 
@@ -45,11 +43,11 @@ else
   message('Building in debug mode')
 endif
 
-gnome_raw_thumbnailer = custom_target(
+rnote_thumbnailer = custom_target(
   'cargo-build',
   build_always_stale: true,
   output: [
-    'raw-thumbnailer'
+    'rnote-thumbnailer'
   ],
   console: true,
   install: true,
@@ -60,11 +58,10 @@ gnome_raw_thumbnailer = custom_target(
     cargo, 'build',
     cargo_options,
     '&&',
-    'cp', cargo_target_dir / rust_target / 'raw-thumbnailer', '@OUTDIR@' / 'raw-thumbnailer'
+    'cp', cargo_target_dir / rust_target / 'rnote-thumbnailer', '@OUTDIR@' / 'rnote-thumbnailer'
   ],
 )
 
 meson.add_dist_script('./build-aux/cargo-vendor.sh', meson.project_source_root() / 'Cargo.toml')
 
 subdir('data')
-subdir('po')

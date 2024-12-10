@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  dist:
+    runs-on: ubuntu-22.04
+    container: fedora:40
+    permissions:
+      contents: write # needed for uploading release artifact
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo dnf upgrade --refresh -y
+          sudo dnf install -y gcc gcc-c++ git
+      - name: Install toolchain
+        id: toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run cargo build
+        run: cargo build --release
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rnote-dist-archive-artifact
+          path: target/release/rnote-thumbnailer
+          if-no-files-found: error

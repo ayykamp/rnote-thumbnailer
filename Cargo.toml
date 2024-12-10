@@ -1,11 +1,12 @@
 [package]
-name = "raw-thumbnailer"
-version = "47.0.1"
+name = "rnote-thumbnailer"
+version = "0.1.0"
 edition = "2021"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-clap = { version = "4.5", features = [ "derive" ] }
-gettext-rs = { version = "0.7.0", features = [ "gettext-system" ] }
-image = { version = "0.25.1", features = [ "png", "jpeg" ], default-features = false }
-libopenraw = { version = "0.4.0-alpha.8", default-features = false }
+rnote-engine = { git = "https://github.com/flxzt/rnote.git", rev = "70e5e0b5f90ece76a384bf7c8b7361d18eb1cbc7", default-features = false }
+clap = { version = "4.5", features = ["derive"] }
+image = { version = "0.25.1", features = ["png"], default-features = false }
+smol = "2.0.2"
+anyhow = "1.0.94"

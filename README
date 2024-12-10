@@ -1,30 +1,27 @@
-This is a camera raw thumbnailers for GNOME.
+This is a [rnote](https://github.com/flxzt/rnote) thumbnailer (forked from [`gnome-raw-thumbnailer`](https://gitlab.gnome.org/World/gnome-raw-thumbnailer)).
 
 It will be used by Nautilus and other application supporting
-thumbnailer to generate thumbnails from camera raw files.
+thumbnailers to generate thumbnails from `.rnote` files.
 
-It is now built in Rust and uses the Rust version of libopenraw.  It
-depends on libopenraw to do most of the work and does extract previews
-instead of processing the raw data. That makes it fast.
+It is built in Rust and uses the `rnote-engine` crate.
 
-But depending on libopenraw mean that it might not support
-all formats and might have bugs.
+# Installation
 
-Libopenraw: http://libopenraw.freedesktop.org
-Raw Thumbnailer https://libopenraw.freedesktop.org/raw-thumbnailer/
+## From Source
 
-The source code is hosted on GNOME gitlab:
-https://gitlab.gnome.org/World/gnome-raw-thumbnailer
+`meson setup build && meson install`
+
+## Pre compiled binary
+
+1. Use [`cargo-binstall`](https://github.com/cargo-bins/cargo-binstall) to get the binary (`cargo binstall rnote-thumbnailer`) or download the latest release artifact.
+2. Run (you may need to create the necessary directories) \
+  `cp data/com.github.flxzt.rnote.xml ~/.local/share/mime/packages/` \
+  `cp data/rnote.thumbnailer ~/.local/share/thumbnailers/`
 
 # Packaging
 
-There is a `raw-thumbnailer.spec` file as an example of RPM
+There is a `rnote-thumbnailer.spec` file as an example of RPM
 packaging.  While it was written for Fedora it is probably not up to
 it standards (it uses vendora tarball). It was written to allow build
 a RPM package for deployment. You can use it by putting the source
-tarball in `~/rpmbuild/SOURCES` and then `rpmbuild -ba raw-thumbnailer.spec`.
-
-# Maintainer
-
-Hubert Figuière
-<hub@figuiere.net>
+tarball in `~/rpmbuild/SOURCES` and then `rpmbuild -ba rnote-thumbnailer.spec`.
