@@ -5,6 +5,8 @@ thumbnailers to generate thumbnails from `.rnote` files.
 
 It is built in Rust and uses the `rnote-engine` crate.
 
+![image](https://github.com/user-attachments/assets/04e72779-a1f8-4d5f-b631-bbb742e4e4d4)
+
 # Installation
 
 ## From Source
